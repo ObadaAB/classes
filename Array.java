@@ -6,7 +6,15 @@ public class Array
     {
         Scanner in = new Scanner(System.in);
         System.out.println("Please enter the number of elements :");
-        int n = in.nextInt();
+        int n = 0;
+        try
+        {
+            n = in.nextInt();
+        }
+        catch (Exception e)
+        {
+            return;
+        }
 
         int [] a = new int[n];
 
