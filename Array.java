@@ -29,7 +29,7 @@ public class Array
         double avg = 0;
         for (int i = 0; i < n; i++)
         {
-            mx = Math.max(mx, a[i]);
+            mx = Math.max(mn, a[i]);
             mn = Math.min(mn, a[i]);
             avg = avg + ((double)a[i]) / n;
         }
