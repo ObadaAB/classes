@@ -10,7 +10,6 @@ public class Mapper
 
     public static void main(String[] args) throws IOException
     {
-        args = args[0].split(" ");
         String host = args[0];
         socket = new Socket(host, port);
 
@@ -23,7 +22,10 @@ public class Mapper
             {
                 mp.put(args[i], mp.get(args[i]) + 1);
             }
-            mp.put(args[i], 1);
+            else
+            {
+                mp.put(args[i], 1);
+            }
         }
 
         objectOutputStream.writeObject(mp);
