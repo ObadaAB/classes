@@ -11,7 +11,9 @@ public class Worker
 
     public static void main(String[] args) throws IOException
     {
-        String host = (new Scanner(System.in)).next();
+        Scanner scanner = new Scanner(System.in);
+        String host = scanner.next();
+        port = scanner.nextInt();
         socket = new Socket(host, port);
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataOutputStream.writeUTF("IT'S WORKING!!!!");
