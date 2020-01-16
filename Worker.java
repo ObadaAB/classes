@@ -2,7 +2,6 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Worker
 {
@@ -11,9 +10,7 @@ public class Worker
 
     public static void main(String[] args) throws IOException
     {
-        Scanner scanner = new Scanner(System.in);
-        String host = scanner.next();
-        port = scanner.nextInt();
+        String host = args[0];
         socket = new Socket(host, port);
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
         dataOutputStream.writeUTF("IT'S WORKING!!!!");
