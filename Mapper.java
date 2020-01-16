@@ -10,6 +10,7 @@ public class Mapper
 
     public static void main(String[] args) throws IOException
     {
+        args = args[0].split(" ");
         String host = args[0];
         socket = new Socket(host, port);
 
