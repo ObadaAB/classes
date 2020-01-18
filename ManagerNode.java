@@ -43,30 +43,30 @@ public class ManagerNode
             }
         });
 
-        PriorityQueue<Map.Entry<Map.Entry<String, Integer>, Integer>> priorityQueue = new PriorityQueue<>();
+        PriorityQueue<MyTuple> priorityQueue = new PriorityQueue<>();
         for (int i = 0; i < n; i++)
         {
-            priorityQueue.add((Map.Entry<Map.Entry<String, Integer>, Integer>) new AbstractMap.SimpleEntry<>(treeMaps[i].firstEntry(), i));
+            priorityQueue.add(new MyTuple(treeMaps[i].firstKey(), treeMaps[i].get(treeMaps[i].firstKey()), i));
             treeMaps[i].remove(treeMaps[i].firstKey());
         }
 
-        ArrayList<Map.Entry<String, Integer>> entryArrayList = new ArrayList<>();
+        ArrayList<MyTuple> entryArrayList = new ArrayList<>();
 
         while (!priorityQueue.isEmpty())
         {
-            Map.Entry<Map.Entry<String, Integer>, Integer> entry = priorityQueue.poll();
-            entryArrayList.add(entry.getKey());
-            int idx = entry.getValue();
+            MyTuple tuple = priorityQueue.poll();
+            entryArrayList.add(tuple);
+            int idx = tuple.getIndex();
             if (!treeMaps[idx].isEmpty())
             {
-                priorityQueue.add(new AbstractMap.SimpleEntry<>(treeMaps[idx].firstEntry(), idx));
+                priorityQueue.add(new MyTuple(treeMaps[idx].firstKey(), treeMaps[idx].get(treeMaps[idx].firstKey()), idx));
                 treeMaps[idx].remove(treeMaps[idx].firstKey());
             }
         }
 
-        for (Map.Entry<String, Integer> entry : entryArrayList)
+        for (MyTuple tuple : entryArrayList)
         {
-            System.out.println(entry.getKey() + " " + entry.getValue());
+            System.out.println(tuple.getKey() + " " + tuple.getValue());
         }
 
         serverSocket.close();
@@ -92,5 +92,40 @@ public class ManagerNode
 
         String [] words = {};
         return words;
+    }
+}
+
+class MyTuple implements Comparable<MyTuple>
+{
+    private String key;
+    private int value;
+    private int index;
+
+    public MyTuple(String key, int values, int index)
+    {
+        this.key = key;
+        this.value = values;
+        this.index = index;
+    }
+
+    @Override
+    public int compareTo(MyTuple myTuple)
+    {
+        return key.compareTo(myTuple.key);
+    }
+
+    public String getKey()
+    {
+        return key;
+    }
+
+    public int getValue()
+    {
+        return value;
+    }
+
+    public int getIndex()
+    {
+        return index;
     }
 }
