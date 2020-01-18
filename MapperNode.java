@@ -17,25 +17,12 @@ public class MapperNode
         ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
         String[] words = (String[])objectInputStream.readObject();
 
-        TreeMap<String, Integer> mp = new TreeMap<>();
-
-        for (int i = 1; i < words.length; i++)
+        for (String word : words)
         {
-            if (mp.containsKey(words[i]))
-            {
-                mp.put(words[i], mp.get(words[i]) + 1);
-            }
-            else
-            {
-                mp.put(words[i], 1);
-            }
+            System.out.println(word);
         }
 
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-        objectOutputStream.writeObject(mp);
-
         objectInputStream.close();
-        objectOutputStream.close();
         socket.close();
     }
 }

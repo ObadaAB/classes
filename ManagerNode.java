@@ -26,13 +26,7 @@ public class ManagerNode
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(sockets[i].getOutputStream());
             String[] nodeWords = Arrays.copyOfRange(words, i * wordsPerNode, Math.min((i + 1) * wordsPerNode, words.length));
             objectOutputStream.writeObject(nodeWords);
-            ObjectInputStream objectInputStream = new ObjectInputStream(sockets[i].getInputStream());
-            TreeMap<String, Integer> treeMap = (TreeMap<String, Integer>) objectInputStream.readObject();
-            for (Map.Entry<String, Integer> x : treeMap.entrySet())
-            {
-                System.out.println(i + " " + x.getKey() + " " + x.getValue());
-            }
-            objectInputStream.close();
+            objectOutputStream.close();
             sockets[i].close();
         }
 
