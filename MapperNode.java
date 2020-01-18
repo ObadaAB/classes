@@ -7,7 +7,7 @@ import java.util.TreeMap;
 public class MapperNode
 {
     private static Socket socket;
-    private static int port = 8080;
+    private static int port = 7070;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException
     {
@@ -21,8 +21,5 @@ public class MapperNode
         {
             System.out.println(word);
         }
-
-        objectInputStream.close();
-        socket.close();
     }
 }

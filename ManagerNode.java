@@ -8,7 +8,7 @@ import java.util.TreeMap;
 public class ManagerNode
 {
     private static ServerSocket serverSocket;
-    private static int port = 8080;
+    private static int port = 7070;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException
     {
@@ -30,11 +30,7 @@ public class ManagerNode
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(sockets[i].getOutputStream());
             String[] nodeWords = Arrays.copyOfRange(words, i * wordsPerNode, Math.min((i + 1) * wordsPerNode, words.length));
             objectOutputStream.writeObject(nodeWords);
-            objectOutputStream.close();
-            sockets[i].close();
         }
-
-        serverSocket.close();
     }
 
     private static String[] getWords()
