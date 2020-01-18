@@ -8,7 +8,7 @@ import java.util.TreeMap;
 public class ManagerNode
 {
     private static ServerSocket serverSocket;
-    private static int port = 8080;
+    private static int port = 8000;
 
     public static void main(String[] args) throws IOException, ClassNotFoundException
     {
