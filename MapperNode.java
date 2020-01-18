@@ -16,7 +16,6 @@ public class MapperNode
 
         ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
         String[] words = (String[])objectInputStream.readObject();
-        objectInputStream.close();
 
         TreeMap<String, Integer> mp = new TreeMap<>();
 
@@ -35,6 +34,7 @@ public class MapperNode
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectOutputStream.writeObject(mp);
 
+        objectInputStream.close();
         objectOutputStream.close();
         socket.close();
     }
