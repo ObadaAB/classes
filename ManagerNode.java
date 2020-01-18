@@ -1,3 +1,6 @@
+import sun.reflect.generics.tree.Tree;
+
+import java.beans.IntrospectionException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,6 +20,8 @@ public class ManagerNode
 
         serverSocket = new ServerSocket(port);
 
+        TreeMap<String, Integer>[] treeMaps = new TreeMap[n];
+
         IntStream.range(0, n).parallel().forEach(i -> {
             try
             {
@@ -26,11 +31,7 @@ public class ManagerNode
                 String[] nodeWords = Arrays.copyOfRange(words, i * wordsPerNode, Math.min((i + 1) * wordsPerNode, words.length));
                 objectOutputStream.writeObject(nodeWords);
 
-                TreeMap<String, Integer> treeMap = (TreeMap<String, Integer>) objectInputStream.readObject();
-                for (Map.Entry<String, Integer> entry : treeMap.entrySet())
-                {
-                    System.out.println(i + " " + entry.getKey());
-                }
+                treeMaps[i] = (TreeMap<String, Integer>) objectInputStream.readObject();
 
                 objectInputStream.close();
                 objectOutputStream.close();
@@ -41,6 +42,32 @@ public class ManagerNode
                 e.printStackTrace();
             }
         });
+
+        PriorityQueue<Map.Entry<Map.Entry<String, Integer>, Integer>> priorityQueue = new PriorityQueue<>();
+        for (int i = 0; i < n; i++)
+        {
+            priorityQueue.add(new AbstractMap.SimpleEntry<>(treeMaps[i].firstEntry(), i));
+            treeMaps[i].remove(treeMaps[i].firstKey());
+        }
+
+        ArrayList<Map.Entry<String, Integer>> entryArrayList = new ArrayList<>();
+
+        while (!priorityQueue.isEmpty())
+        {
+            Map.Entry<Map.Entry<String, Integer>, Integer> entry = priorityQueue.poll();
+            entryArrayList.add(entry.getKey());
+            int idx = entry.getValue();
+            if (!treeMaps[idx].isEmpty())
+            {
+                priorityQueue.add(new AbstractMap.SimpleEntry<>(treeMaps[idx].firstEntry(), idx));
+                treeMaps[idx].remove(treeMaps[idx].firstKey());
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : entryArrayList)
+        {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
 
         serverSocket.close();
     }
