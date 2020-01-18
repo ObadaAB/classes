@@ -1,9 +1,8 @@
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class ManagerNode
 {
@@ -18,30 +17,30 @@ public class ManagerNode
 
         serverSocket = new ServerSocket(port);
 
-        Socket[] sockets = new Socket[n];
-
-        for (int i = 0; i < n; i++)
-        {
-            sockets[i] = serverSocket.accept();
-        }
-
-        for (int i = 0; i < n; i++)
-        {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(sockets[i].getOutputStream());
-            ObjectInputStream objectInputStream = new ObjectInputStream(sockets[i].getInputStream());
-            String[] nodeWords = Arrays.copyOfRange(words, i * wordsPerNode, Math.min((i + 1) * wordsPerNode, words.length));
-            objectOutputStream.writeObject(nodeWords);
-
-            TreeMap<String, Integer> treeMap = (TreeMap<String, Integer>) objectInputStream.readObject();
-            for (Map.Entry<String, Integer> entry : treeMap.entrySet())
+        IntStream.range(0, n).parallel().forEach(i -> {
+            try
             {
-                System.out.println(i + " " + entry.getKey());
-            }
+                Socket socket = serverSocket.accept();
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                String[] nodeWords = Arrays.copyOfRange(words, i * wordsPerNode, Math.min((i + 1) * wordsPerNode, words.length));
+                objectOutputStream.writeObject(nodeWords);
 
-            objectInputStream.close();
-            objectOutputStream.close();
-            sockets[i].close();
-        }
+                TreeMap<String, Integer> treeMap = (TreeMap<String, Integer>) objectInputStream.readObject();
+                for (Map.Entry<String, Integer> entry : treeMap.entrySet())
+                {
+                    System.out.println(i + " " + entry.getKey());
+                }
+
+                objectInputStream.close();
+                objectOutputStream.close();
+                socket.close();
+            }
+            catch (IOException | ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+        });
 
         serverSocket.close();
     }
