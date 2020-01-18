@@ -1,3 +1,5 @@
+import sun.reflect.generics.tree.Tree;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,11 +17,26 @@ public class MapperNode
         socket = new Socket(host, port);
 
         ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         String[] words = (String[])objectInputStream.readObject();
 
+        TreeMap<String, Integer> treeMap = new TreeMap<>();
         for (String word : words)
         {
-            System.out.println(word);
+            if (treeMap.containsKey(word))
+            {
+                treeMap.put(word, treeMap.get(word) + 1);
+            }
+            else
+            {
+                treeMap.put(word, 1);
+            }
         }
+
+        objectOutputStream.writeObject(treeMap);
+
+        objectInputStream.close();
+        objectOutputStream.close();
+        socket.close();
     }
 }
