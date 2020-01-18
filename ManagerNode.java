@@ -46,7 +46,7 @@ public class ManagerNode
         PriorityQueue<Map.Entry<Map.Entry<String, Integer>, Integer>> priorityQueue = new PriorityQueue<>();
         for (int i = 0; i < n; i++)
         {
-            priorityQueue.add(new AbstractMap.SimpleEntry<>(treeMaps[i].firstEntry(), i));
+            priorityQueue.add((Map.Entry<Map.Entry<String, Integer>, Integer>) new AbstractMap.SimpleEntry<>(treeMaps[i].firstEntry(), i));
             treeMaps[i].remove(treeMaps[i].firstKey());
         }
 
